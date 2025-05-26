@@ -263,7 +263,7 @@ export default function Component() {
             </CardHeader>
             <CardContent className="p-6">
               <div className="text-center mb-6">
-                <div className="text-3xl font-bold text-green-600 mb-2">$29.99</div>
+                <div className="text-3xl font-bold text-green-600 mb-2">$0.99</div>
                 <p className="text-gray-600">Unlock your cognitive potential</p>
                 <div className="mt-4 space-y-2 text-sm text-gray-700">
                   <div className="flex items-center gap-2">
@@ -299,7 +299,7 @@ export default function Component() {
 
                 <Button onClick={handlePaymentAttempt} className="w-full bg-green-600 hover:bg-green-700">
                   <CreditCard className="h-4 w-4 mr-2" />
-                  Pay $29.99
+                  Pay $0.99
                 </Button>
 
                 <div className="text-center text-gray-500 text-sm">or pay with</div>
