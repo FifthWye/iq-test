@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Brain, Clock, CheckCircle, CreditCard, Smartphone, DollarSign, Laugh } from "lucide-react"
+import { Brain, Clock, CheckCircle, CreditCard, Smartphone, DollarSign, Laugh, Trophy } from "lucide-react"
 
 interface Question {
   id: number
@@ -171,7 +171,7 @@ const funnyTexts = [
 ]
 
 export default function IQTest() {
-  const [screen, setScreen] = useState<"payment" | "gotcha" | "test" | "results">("test")
+  const [screen, setScreen] = useState<"payment" | "gotcha" | "test" | "results" | "smart-move">("test")
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>(new Array(20).fill(-1))
   const [timeStarted, setTimeStarted] = useState<number>(Date.now())
@@ -235,6 +235,10 @@ export default function IQTest() {
     setScreen("gotcha")
   }
 
+  const handleSmartChoice = () => {
+    setScreen("smart-move")
+  }
+
   const handleAnswerSelect = (answerIndex: number) => {
     const newAnswers = [...selectedAnswers]
     newAnswers[currentQuestion] = answerIndex
@@ -286,6 +290,97 @@ export default function IQTest() {
     if (iq >= 90) return "Normal or average intelligence"
     if (iq >= 80) return "Dullness"
     return "Borderline deficiency"
+  }
+
+  // Smart Move Screen
+  if (screen === "smart-move") {
+    const { iq, correctAnswers, percentage } = calculateIQ()
+    const timeElapsed = Math.floor((Date.now() - timeStarted) / 1000 / 60)
+
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-4">
+        <div className="max-w-2xl mx-auto">
+          <Card className="shadow-xl">
+            <CardHeader className="text-center bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-t-lg">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Trophy className="h-8 w-8" />
+                <CardTitle className="text-2xl">Smart Move! 🎉</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-8 text-center">
+              <div className="mb-6">
+                <div className="text-6xl mb-4">🧠✨</div>
+                <div className="text-2xl font-bold text-green-700 mb-4">
+                  Congratulations! You just passed the REAL intelligence test!
+                </div>
+              </div>
+
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                <h3 className="text-xl font-semibold text-green-800 mb-3">Why this was the smart choice:</h3>
+                <ul className="text-left space-y-2 text-green-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-1">✅</span>
+                    <span>You questioned the need to pay for something that should be free</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-1">✅</span>
+                    <span>You showed healthy skepticism toward online payment requests</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-1">✅</span>
+                    <span>You demonstrated critical thinking by looking for alternatives</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-1">✅</span>
+                    <span>You avoided a potential scam - that's real-world intelligence!</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="mb-8">
+                <div className="text-3xl font-bold text-blue-600 mb-2">Your IQ is probably something like:</div>
+                <div className="text-6xl font-bold text-blue-600 mb-2">{iq}</div>
+                <div className="text-xl text-gray-600 mb-4">Based on your answers</div>
+                <div className="text-lg font-medium text-gray-800 mb-6">{getIQInterpretation(iq)}</div>
+                <div className="text-lg font-semibold text-green-700">
+                  + Bonus points for being smart enough not to pay! 🎯
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">{correctAnswers}/20</div>
+                  <div className="text-sm text-gray-600">Correct Answers</div>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-blue-600">{percentage.toFixed(1)}%</div>
+                  <div className="text-sm text-gray-600">Accuracy</div>
+                </div>
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-purple-600">{timeElapsed}m</div>
+                  <div className="text-sm text-gray-600">Time Taken</div>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <p className="text-gray-700">
+                  <strong>Remember:</strong> Real intelligence isn't just about solving puzzles - it's about making
+                  smart decisions in real life. You just demonstrated both! 🌟
+                </p>
+              </div>
+
+              <Button onClick={() => window.location.reload()} className="bg-green-600 hover:bg-green-700">
+                Take Test Again
+              </Button>
+
+              <p className="text-sm text-gray-500 mt-4">
+                Share this with friends to see if they're as smart as you! 😉
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
   }
 
   // Payment Screen
@@ -356,6 +451,17 @@ export default function IQTest() {
                   <Button variant="outline" onClick={handlePaymentAttempt} className="flex items-center justify-center">
                     <Smartphone className="h-4 w-4" />
                     <span className="ml-1 text-xs">Apple</span>
+                  </Button>
+                </div>
+
+                {/* Smart Choice Button */}
+                <div className="pt-4 border-t border-gray-200">
+                  <Button
+                    variant="outline"
+                    onClick={handleSmartChoice}
+                    className="w-full text-xs text-gray-500 hover:text-gray-700 border-gray-300 hover:border-gray-400"
+                  >
+                    what if I don't wanna pay? 🤔
                   </Button>
                 </div>
               </div>
