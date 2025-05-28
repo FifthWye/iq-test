@@ -7,6 +7,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import ScamReports from "./scam-reports"
 
 export default function RealHomePage() {
   const [selectedFakeIQ, setSelectedFakeIQ] = useState(160)
@@ -31,7 +32,11 @@ export default function RealHomePage() {
     }
 
     const encodedMessage = encodeURIComponent(message)
-    const url = `${baseURL}?share=true&iq=${iqScore}&name=${encodeURIComponent(name)}&message=${encodedMessage}`
+    const encodedName = encodeURIComponent(name)
+
+    // Include metadata parameters for dynamic title/description
+    const url = `${baseURL}?share=true&iq=${iqScore}&name=${encodedName}&message=${encodedMessage}&title=${encodeURIComponent(`${name} scored ${iqScore} on IQ Test!`)}&description=${encodeURIComponent(`${name} just completed an IQ test and scored ${iqScore}! Think you're smarter? Take the free IQ test now!`)}`
+
     setShareURL(url)
   }
 
@@ -76,6 +81,11 @@ export default function RealHomePage() {
               </p>
             </CardContent>
           </Card>
+
+          {/* Scam Reports Section */}
+          <div className="mb-12">
+            <ScamReports />
+          </div>
 
           {/* Main Content */}
           <div className="grid md:grid-cols-1 gap-8 mb-12">

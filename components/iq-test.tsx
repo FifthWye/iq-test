@@ -8,6 +8,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Brain, Clock, CheckCircle, CreditCard, Smartphone, DollarSign, Laugh, Trophy } from "lucide-react"
+import ScamReports from "./scam-reports"
+
 
 interface Question {
   id: number
@@ -292,10 +294,33 @@ export default function IQTest() {
     return "Borderline deficiency"
   }
 
+   const saveFirstTryResults = () => {
+    // Check if this is the first time taking the test
+    const existingData = localStorage.getItem("iqTestFirstTry")
+    if (!existingData) {
+      const { iq, correctAnswers, percentage } = calculateIQ()
+      const timeElapsed = Math.floor((Date.now() - timeStarted) / 1000 / 60)
+
+      const firstTryData = {
+        iq,
+        correctAnswers,
+        percentage,
+        timeElapsed,
+        completedAt: new Date().toISOString(),
+        totalQuestions: questions.length,
+      }
+
+      localStorage.setItem("iqTestFirstTry", JSON.stringify(firstTryData))
+    }
+  }
+
   // Smart Move Screen
   if (screen === "smart-move") {
     const { iq, correctAnswers, percentage } = calculateIQ()
     const timeElapsed = Math.floor((Date.now() - timeStarted) / 1000 / 60)
+
+    // Save first try results
+    saveFirstTryResults()
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 p-4">
@@ -367,6 +392,12 @@ export default function IQTest() {
                   <strong>Remember:</strong> Real intelligence isn't just about solving puzzles - it's about making
                   smart decisions in real life. You just demonstrated both! 🌟
                 </p>
+              </div>
+
+              {/* Scam Reports Section */}
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-red-700 mb-4">Learn from Real Scam Victims</h3>
+                <ScamReports />
               </div>
 
               <Button onClick={() => window.location.reload()} className="bg-green-600 hover:bg-green-700">
@@ -456,12 +487,14 @@ export default function IQTest() {
 
                 {/* Smart Choice Button */}
                 <div className="pt-4 border-t border-gray-200">
-                  <a
-                    onClick={handleSmartChoice}
-                    className="w-full text-xs text-gray-500 hover:text-gray-700"
-                  >
-                    what if I don't wanna pay?
-                  </a>
+                  <div className="flex justify-center">
+                    <a
+                      onClick={handleSmartChoice}
+                      className="w-full max-w-fit text-xs text-gray-300 hover:text-gray-700 text-center cursor-pointer"
+                    >
+                      what if I don't wanna pay?
+                    </a>
+                  </div>
                 </div>
               </div>
             </CardContent>
