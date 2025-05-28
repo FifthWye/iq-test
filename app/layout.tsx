@@ -3,7 +3,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'IQ Test Pro',
-  description: 'Try your inelegance',
+  description: 'Try your intelligence',
 }
 
 export default function RootLayout({
