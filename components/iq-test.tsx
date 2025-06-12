@@ -188,8 +188,9 @@ export default function IQTest() {
 
       try {
         // Using Giphy's public API with a demo key (limited but works for demos)
+        const apiKey = process.env.NEXT_PUBLIC_GIPHY_API_KEY
         const response = await fetch(
-          `https://api.giphy.com/v1/gifs/search?api_key=9LKzaOhKGRhKKhJQKKhJQKKhJQKKhJQK&q=${randomKeyword}&limit=25&rating=g&lang=en`,
+          `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${randomKeyword}&limit=25&rating=g&lang=en`,
         )
 
         if (response.ok) {
