@@ -1,6 +1,5 @@
 import type React from "react"
 import type { Metadata } from "next"
-import GoogleAnalytics from "../components/google-analytics"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -16,7 +15,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body><GoogleAnalytics />{children}</body>
+      <head>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCXNR1DPG8"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-LCXNR1DPG8');
+            `,
+          }}
+        />
+      </head>
+      <body>{children}</body>
     </html>
   )
 }
