@@ -9,6 +9,41 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import ScamReports from "./scam-reports"
 
+// Mapping IQ scores to random keys
+const IQ_KEY_MAP: { [key: number]: string } = {
+  75: "xk9",
+  85: "m2p",
+  145: "r7w",
+  160: "q4z",
+  180: "n8v",
+  200: "b5j",
+}
+
+// Reverse mapping for decoding
+const KEY_IQ_MAP: { [key: string]: number } = {
+  xk9: 75,
+  m2p: 85,
+  r7w: 145,
+  q4z: 160,
+  n8v: 180,
+  b5j: 200,
+}
+
+// Simple encoding/decoding functions
+const encodeName = (name: string): string => {
+  return btoa(name).replace(/[+=]/g, "").substring(0, 8)
+}
+
+const decodeName = (encoded: string): string => {
+  try {
+    // Add padding if needed
+    const padded = encoded + "==".substring(0, (4 - (encoded.length % 4)) % 4)
+    return atob(padded)
+  } catch {
+    return "Someone"
+  }
+}
+
 export default function RealHomePage() {
   const [selectedFakeIQ, setSelectedFakeIQ] = useState(160)
   const [fakeName, setFakeName] = useState("")
@@ -20,22 +55,12 @@ export default function RealHomePage() {
     const name = fakeName || "Someone"
     const iqScore = selectedFakeIQ
 
-    let message = ""
-    if (iqScore >= 160) {
-      message = `${name} just scored ${iqScore} on an IQ test! That's Einstein level! 🧠✨`
-    } else if (iqScore >= 140) {
-      message = `${name} is officially a genius with an IQ of ${iqScore}! 🎓⭐`
-    } else if (iqScore >= 120) {
-      message = `${name} scored ${iqScore} - that's in the top 10%! 🚀`
-    } else {
-      message = `${name} got ${iqScore}... maybe the test was broken? 😅`
-    }
+    // Get the random key for this IQ score
+    const iqKey = IQ_KEY_MAP[iqScore]
+    // Encode the name
+    const encodedName = encodeName(name)
 
-    const encodedMessage = encodeURIComponent(message)
-    const encodedName = encodeURIComponent(name)
-
-    // Include metadata parameters for dynamic title/description
-    const url = `${baseURL}?share=true&iq=${iqScore}&name=${encodedName}&message=${encodedMessage}&title=${encodeURIComponent(`${name} scored ${iqScore} on IQ Test!`)}&description=${encodeURIComponent(`${name} just completed an IQ test and scored ${iqScore}! Think you're smarter? Take the free IQ test now!`)}`
+    const url = `${baseURL}?t=${iqKey}&h=${encodedName}`
 
     setShareURL(url)
   }
@@ -293,7 +318,7 @@ export default function RealHomePage() {
                       <p className="text-blue-800 font-medium mb-2">Share this link with your friends:</p>
                       <div className="flex gap-2">
                         <Input value={shareURL} readOnly className="flex-1 text-sm" />
-                        <Button onClick={copyToClipboard} variant="outline" className="border-blue-300">
+                        <Button onClick={copyToClipboard} variant="outline" className="border-blue-300 bg-transparent">
                           {copied ? "Copied!" : "Copy"}
                         </Button>
                       </div>

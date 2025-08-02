@@ -5,19 +5,55 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
+// Reverse mapping for decoding IQ keys
+const KEY_IQ_MAP: { [key: string]: number } = {
+  xk9: 75,
+  m2p: 85,
+  r7w: 145,
+  q4z: 160,
+  n8v: 180,
+  b5j: 200,
+}
+
+// Simple decoding function for names
+const decodeName = (encoded: string): string => {
+  try {
+    // Add padding if needed
+    const padded = encoded + "==".substring(0, (4 - (encoded.length % 4)) % 4)
+    return atob(padded)
+  } catch {
+    return "Someone"
+  }
+}
+
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const params = await searchParams
 
-  // Check if this is a shared result URL
-  const isShared = params?.share === "true"
-  const iq = params?.iq
-  const name = params?.name
-  const message = params?.message
+  let iqScore: number | undefined
+  let decodedName: string | undefined
 
-  if (isShared && iq && name && message) {
-    const decodedName = decodeURIComponent(name as string)
-    const iqScore = iq as string
+  // NEW FORMAT: Check for encoded parameters first
+  const testKey = params?.t // random key for IQ score
+  const hashKey = params?.h // encoded name
 
+  if (testKey && hashKey) {
+    // Decode the IQ score from the random key
+    iqScore = KEY_IQ_MAP[testKey as string]
+    // Decode the name
+    decodedName = decodeName(hashKey as string)
+  } else {
+    // OLD FORMAT: Fallback to previous URL parameters for backward compatibility
+    const score = params?.s // old obscure parameter for score
+    const user = params?.u // old obscure parameter for user
+
+    if (score && user) {
+      iqScore = Number(score)
+      decodedName = decodeURIComponent(user as string)
+    }
+  }
+
+  // If we have valid shared result data (from either format)
+  if (iqScore && decodedName) {
     return {
       title: `${decodedName} scored ${iqScore} on IQ Test! Can you beat this score?`,
       description: `${decodedName} just completed an IQ test and scored ${iqScore}! Think you're smarter? Take the free IQ test and find out your score!`,

@@ -8,6 +8,27 @@ import { Brain, Star, Award, Users, TrendingUp, Shield, CheckCircle } from "luci
 import Link from "next/link"
 import IQTest from "./iq-test"
 
+// Reverse mapping for decoding IQ keys
+const KEY_IQ_MAP: { [key: string]: number } = {
+  xk9: 75,
+  m2p: 85,
+  r7w: 145,
+  q4z: 160,
+  n8v: 180,
+  b5j: 200,
+}
+
+// Simple decoding function for names
+const decodeName = (encoded: string): string => {
+  try {
+    // Add padding if needed
+    const padded = encoded + "==".substring(0, (4 - (encoded.length % 4)) % 4)
+    return atob(padded)
+  } catch {
+    return "Someone"
+  }
+}
+
 const fakeReviews = [
   {
     name: "Sarah M.",
@@ -72,16 +93,62 @@ export default function HomePage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search)
-      const isShared = urlParams.get("share")
-      const iq = urlParams.get("iq")
-      const name = urlParams.get("name")
-      const message = urlParams.get("message")
 
-      if (isShared && iq && name && message) {
+      // NEW FORMAT: Check for encoded parameters first
+      const testKey = urlParams.get("t") // random key for IQ score
+      const hashKey = urlParams.get("h") // encoded name
+
+      if (testKey && hashKey) {
+        // Decode the IQ score from the random key
+        const iqScore = KEY_IQ_MAP[testKey]
+        // Decode the name
+        const decodedName = decodeName(hashKey)
+
+        if (iqScore) {
+          let message = ""
+          if (iqScore >= 160) {
+            message = `${decodedName} just scored ${iqScore} on an IQ test! That's Einstein level! 🧠✨`
+          } else if (iqScore >= 140) {
+            message = `${decodedName} is officially a genius with an IQ of ${iqScore}! 🎓⭐`
+          } else if (iqScore >= 120) {
+            message = `${decodedName} scored ${iqScore} - that's in the top 10%! 🚀`
+          } else {
+            message = `${decodedName} got ${iqScore}... maybe the test was broken? 😅`
+          }
+
+          setSharedResult({
+            iq: iqScore,
+            name: decodedName,
+            message: message,
+          })
+          return // Exit early if new format is found
+        }
+      }
+
+      // OLD FORMAT: Fallback to previous URL parameters for backward compatibility
+      const score = urlParams.get("s") // old obscure parameter for score
+      const user = urlParams.get("u") // old obscure parameter for user
+
+      if (score && user) {
+        // Regenerate the message from the old data
+        const decodedName = decodeURIComponent(user)
+        const iqScore = Number(score)
+
+        let message = ""
+        if (iqScore >= 160) {
+          message = `${decodedName} just scored ${iqScore} on an IQ test! That's Einstein level! 🧠✨`
+        } else if (iqScore >= 140) {
+          message = `${decodedName} is officially a genius with an IQ of ${iqScore}! 🎓⭐`
+        } else if (iqScore >= 120) {
+          message = `${decodedName} scored ${iqScore} - that's in the top 10%! 🚀`
+        } else {
+          message = `${decodedName} got ${iqScore}... maybe the test was broken? 😅`
+        }
+
         setSharedResult({
-          iq: Number(iq),
-          name: decodeURIComponent(name),
-          message: decodeURIComponent(message),
+          iq: iqScore,
+          name: decodedName,
+          message: message,
         })
       }
     }
