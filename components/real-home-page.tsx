@@ -331,6 +331,101 @@ export default function RealHomePage() {
                 </div>
               </CardContent>
             </Card>
+
+            <Card className="shadow-lg border-gray-200 bg-white">
+              <CardHeader>
+                <CardTitle className="text-2xl text-gray-800">How the Educational Prank Works</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700 mb-6">
+                  This interactive demonstration teaches your friends about online scam tactics through experience.
+                  Here's exactly what happens:
+                </p>
+
+                <div className="space-y-6">
+                  {/* Step 1 */}
+                  <div className="flex gap-4 p-4 bg-white rounded-lg border border-purple-200">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">
+                      1
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-purple-800 mb-2">Create Your Fake Test Result</h4>
+                      <p className="text-purple-700 text-sm">
+                        Use the tool above to generate a convincing fake IQ score and personalized message. The link
+                        looks legitimate and shows your "amazing" result.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="flex gap-4 p-4 bg-white rounded-lg border border-purple-200">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">
+                      2
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-purple-800 mb-2">Send to Friends & Watch</h4>
+                      <p className="text-purple-700 text-sm">
+                        Share the link saying "I just took this IQ test and got [score]! You should try it too!" Your
+                        friends will see your fake result and be motivated to take the test themselves.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="flex gap-4 p-4 bg-white rounded-lg border border-purple-200">
+                    <div className="flex-shrink-0 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold">
+                      3
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-purple-800 mb-2">The Payment Trap</h4>
+                      <p className="text-purple-700 text-sm">
+                        After completing the test, they're asked to pay $0.99 to see their results. This is where the
+                        real test begins - will they fall for the scam?
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 5 - Smart Path */}
+                  <div className="flex gap-4 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">
+                      ✓
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-green-800 mb-2">Smart Friends Pass the Real Test</h4>
+                      <p className="text-green-700 text-sm">
+                        If they find and click the small "What if I don't want to pay?" button at the bottom, they pass!
+                        The site reveals it's educational and shows their results for free, proving they're smart enough
+                        not to pay for online IQ tests.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 6 - Scam Path */}
+                  <div className="flex gap-4 p-4 bg-red-50 rounded-lg border border-red-200">
+                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">
+                      !
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-red-800 mb-2">Those Who Try to Pay Learn a Lesson</h4>
+                      <p className="text-red-700 text-sm">
+                        If they attempt to enter payment information, the site immediately stops them and reveals the
+                        truth with a funny GIF and message: "You failed the real test! Never enter credit card info on
+                        random websites." They get their results for free and learn a valuable lesson.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <h4 className="font-semibold text-yellow-800 mb-2">🎯 The Real Learning Outcome</h4>
+                  <p className="text-yellow-700 text-sm">
+                    Either way, your friends learn something valuable: how to spot online scams, the importance of
+                    skepticism, and that real intelligence includes not falling for fake tests. It's education disguised
+                    as entertainment!
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Footer */}
